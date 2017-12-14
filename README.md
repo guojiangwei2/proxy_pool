@@ -180,6 +180,53 @@ freeProxyCustom  = 1  # 确保名字和你添加方法名字一致
 
 　　[@kangnwh](https://github.com/kangnwh)| [@bobobo80](https://github.com/bobobo80)| [@halleywj](https://github.com/halleywj)| [@newlyedward](https://github.com/newlyedward)| [@wang-ye](https://github.com/wang-ye)| [@gladmo](https://github.com/gladmo)| [@bernieyangmh](https://github.com/bernieyangmh)| [@PythonYXY](https://github.com/PythonYXY)| [@zuijiawoniu](https://github.com/zuijiawoniu)| [@netAir](https://github.com/netAir)| [@gladmo](https://github.com/gladmo)| [@scil](https://github.com/scil)
 
+### 部署【guojw】
+#### 1. 准备虚拟环境 - python3
+```bash
+$ virtualenv -p python3 venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
+#### 2. 使用gunicorn和supervisor分别启动服务
+
+* 安装supervisor，supervisor是与项目独立的进程，与python版本无关，目前只支持到python2
+
+```bash
+$ sudo pip2 install supervisor
+```
+
+* 设置supervisor配置文件
+
+```bash
+$ echo_supervisord_conf > /etc/supervisord.conf
+```
+
+* 修改配置文件，添加对本项目的配置数据，参考示例如下
+
+```bash
+[program:proxy_pool_api]
+directory=/path/to/proxy_pool
+command=/path/to/proxy_pool/venv/bin/gunicorn -c gunicorn.conf -b 0.0.0.0:5010 runserver:app
+autostart=false
+stdout_logfile=/path/to/log/proxy_pool_api/info.log
+stderr_logfile=/path/to/log/proxy_pool_api/error.log
+loglevel=info
+
+[program:proxy_pool_refresh]
+directory=/path/to/proxy_pool/Schedule
+command=/path/to/proxy_pool/venv/bin/python ProxyRefreshSchedule.py &
+autostart=false
+stdout_logfile=/path/to/proxy_pool/log/proxy_pool_refresh/info.log
+stderr_logfile=/path/to/proxy_pool/log/proxy_pool_refresh/error.log
+loglevel=info
 
 
-
+[program:proxy_pool_valid]
+directory=/path/to/proxy_pool/Schedule
+command=/path/to/proxy_pool/venv/bin/python ProxyValidSchedule.py &
+autostart=false
+stdout_logfile=/path/to/proxy_pool/log/proxy_pool_valid/info.log
+stderr_logfile=/path/to/proxy_pool/log/proxy_pool_valid/error.log
+loglevel=info
+```

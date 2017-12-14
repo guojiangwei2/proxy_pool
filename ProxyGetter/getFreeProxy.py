@@ -45,7 +45,7 @@ class GetFreeProxy(object):
         :return:
         """
         url_list = ['http://www.data5u.com/',
-                    'http://www.data5u.com/free/',
+                    'http://www.data5u.com/free/index.shtml',
                     'http://www.data5u.com/free/gngn/index.shtml',
                     'http://www.data5u.com/free/gnpt/index.shtml']
         for url in url_list:
