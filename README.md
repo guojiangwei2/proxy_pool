@@ -207,7 +207,7 @@ $ echo_supervisord_conf > /etc/supervisord.conf
 ```bash
 [program:proxy_pool_api]
 directory=/path/to/proxy_pool
-command=/path/to/proxy_pool/venv/bin/gunicorn -c gunicorn.conf -b 0.0.0.0:5010 runserver:app
+command=/path/to/proxy_pool/venv/bin/gunicorn -c gunicorn.conf -b 0.0.0.0:5010 runserver:proxy_api_app
 autostart=false
 stdout_logfile=/path/to/log/proxy_pool_api/info.log
 stderr_logfile=/path/to/log/proxy_pool_api/error.log
